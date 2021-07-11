@@ -10,12 +10,13 @@ using namespace std;
 const int MAX = 26;
 
 struct trieNode {
-	int index;
+	string value;
 	trieNode* child[MAX];
+	node* list;
 	trieNode() {
 		for (int i = 0; i < MAX; i++) {
 			child[i] = nullptr;
-			index = -1;
+			index = NULL;
 		}
 	}
 };
