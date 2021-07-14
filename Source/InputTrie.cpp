@@ -64,15 +64,11 @@ void inputData(trieNode* &root, unordered_set<string> stopWord, string word, str
     
 }
 
-bool isLeafNode(trieNode *root) {
-    return root->isLeaf != false;
-}
-
 void display(struct trieNode* root, char str[], int level)
 {
     // Nếu là leaf node, thì đã tạo thành một từ rồi
     // Thêm \0 ở cuối để cout ra
-    if (isLeafNode(root)) 
+    if (root->isLeaf) 
     {
         str[level] = '\0';
         cout << str << " ";

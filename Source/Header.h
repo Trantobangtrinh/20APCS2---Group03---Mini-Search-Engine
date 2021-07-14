@@ -40,6 +40,4 @@ void getStopWord(unordered_set <string> &stopWord, string path);
 
 void saveTrie(trieNode *&root, unordered_set<string> stopWord, string path);
 
-bool isLeafNode(trieNode *root);
-
 void display(struct trieNode* root, char str[], int level);
