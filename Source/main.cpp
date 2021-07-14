@@ -3,11 +3,22 @@
 #include <stdlib.h>
 #include <conio.h>
 #include "Console.h"
+#include "Header.h"
 
 using namespace std;
 
 int main() {
     setConsoleWindow(800, 600);
+    trieNode *root = new trieNode();
+    unordered_set <string> stopWord;
+
+    getStopWord(stopWord, "stopWord.txt");
+    saveTrie(root, stopWord, "Data1000.txt");
+
+    // int level = 0;
+    // char str[20];
+
+    // display(root, str, level);
 
     char choice = '4';
 
