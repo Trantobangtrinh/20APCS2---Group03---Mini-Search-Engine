@@ -18,15 +18,14 @@ struct Store {
     string fileName;
     vector <int> pos;
     int score = 0;
-    bool isTitle = false;
+    bool isTitle;
 };
 
 struct trieNode
 {
     trieNode *child[MAX];
-    bool isLeaf, isTitle;
+    bool isLeaf;
     vector <Store> file;
-
     trieNode()
     {
         for (int i = 0; i < MAX; i++)

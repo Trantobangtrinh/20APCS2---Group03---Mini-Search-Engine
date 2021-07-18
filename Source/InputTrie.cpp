@@ -4,9 +4,18 @@ void saveTrie(trieNode*& root, unordered_set<string> stopWord, string path) {
     fstream in;
     in.open(path);
     string word;
+    int i = 0;
+    bool isTit = true;
     if (in.is_open()) {
         while (in >> word) {
-            inputData(root, stopWord, word, path);
+            for (int j = 0; j < word.length(); ++j) {
+                if (word[j] < 'A' || word[j] > 'Z') {
+                    isTit = false;
+                    break;
+                }
+            }
+            inputData(root, stopWord, word, path, i, isTit);
+            i++;
         }
         in.close();
     }
@@ -28,19 +37,20 @@ void getStopWord(unordered_set <string> &stopWord, string path) {
     return;
 }
 
-void inputData(trieNode* &root, unordered_set<string> stopWord, string word, string path) {
+void inputData(trieNode* &root, unordered_set<string> stopWord, string word, string path, int position, bool isTit) {
     trieNode* cur = root;
 
     // Check từ trong stop word
     // Nếu từ đó không phải stop word thì insert vào Trie
-    if (stopWord.find(word) == stopWord.end()) {
-
+    if (isTit == false) {
+        word[0] = tolower(word[0]);
+    }
+    if (isTit == true || stopWord.find(word) == stopWord.end()) {
         // Insert từ vào trie
         for (int i = 0; i < word.length(); ++i) {
             int index = tolower(word[i]) - 'a';
-            if (index < 0 || index >= 26) {
+            if (word[i] < 'a' || word[i] > 'z')
                 continue;
-            }
             if (cur->child[index] == nullptr)
                 cur->child[index] = new trieNode();
             cur = cur->child[index];
@@ -48,20 +58,23 @@ void inputData(trieNode* &root, unordered_set<string> stopWord, string word, str
 
         cur->isLeaf = true;
 
-        // Check đã có giá trị trước đó chưa, nếu chưa thì thêm, nếu đã có thì insert vào đầu
-        if (cur->list == nullptr) {
-            cur->list = new node;
-            cur->list->data = path;
-            cur->list->next = nullptr;
-        }
-        else {
-            node* tmp = new node;
-            tmp->data = path;
-            tmp->next = cur->list;
-            cur->list = tmp;
-        }
+        // Check đã có giá trị trước đó chưa, nếu chưa thì thêm, nếu đã có thì insert vào đầu 
     }
     
+    for (int i = 0; i < cur->file.size(); ++i) {
+        if (cur->file[i].fileName == path) {
+            cur->file[i].score++;
+            cur->file[i].pos.push_back(position);
+            cur->file[i].isTitle = isTit;
+            return;
+        }
+    }
+    Store a;
+    a.fileName = path;
+    a.score++;
+    a.pos.push_back(position);
+    a.isTitle = isTit;
+    cur->file.push_back(a);
 }
 
 void display(struct trieNode* root, char str[], int level)
