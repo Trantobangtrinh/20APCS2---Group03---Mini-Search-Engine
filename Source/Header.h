@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include <cctype>
+#include <algorithm>
 
 using namespace std;
 
@@ -16,14 +17,15 @@ const int MAX = 42;
 struct Store {
     string fileName;
     vector <int> pos;
-    int score;
+    int score = 0;
+    bool isTitle = false;
 };
 
 struct trieNode
 {
     trieNode *child[MAX];
     bool isLeaf, isTitle;
-    vector <int> order;
+    vector <Store> file;
 
     trieNode()
     {
@@ -32,11 +34,10 @@ struct trieNode
             child[i] = nullptr;
         }
         isLeaf = false;
-        isTitle = false;
     }
 };
 
-void inputData(trieNode *&root, unordered_set<string> stopWord, string word, string path);
+void inputData(trieNode*& root, unordered_set<string> stopWord, string word, string path, int i, bool isTit);
 
 void getStopWord(unordered_set <string> &stopWord, string path);
 
