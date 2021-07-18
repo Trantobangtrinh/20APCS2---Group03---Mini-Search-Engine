@@ -10,28 +10,30 @@
 
 using namespace std;
 
-const int MAX = 26;
+// 0-9: number, 10-35: words, 36: :, 37: . (decimal), 38: $, 39: %, 40: #, 41:-
+const int MAX = 42; 
 
-struct node
-{
-	string data;
-	node *next;
+struct Store {
+    string fileName;
+    vector <int> pos;
+    int score;
 };
 
 struct trieNode
 {
-	trieNode *child[MAX];
-	node *list;
-	bool isLeaf;
-	trieNode()
-	{
-		for (int i = 0; i < MAX; i++)
-		{
-			child[i] = nullptr;
-			list = nullptr;
-		}
-		isLeaf = false;
-	}
+    trieNode *child[MAX];
+    bool isLeaf, isTitle;
+    vector <int> order;
+
+    trieNode()
+    {
+        for (int i = 0; i < MAX; i++)
+        {
+            child[i] = nullptr;
+        }
+        isLeaf = false;
+        isTitle = false;
+    }
 };
 
 void inputData(trieNode *&root, unordered_set<string> stopWord, string word, string path);
