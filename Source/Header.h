@@ -43,3 +43,15 @@ void getStopWord(unordered_set <string> &stopWord, string path);
 void saveTrie(trieNode *&root, unordered_set<string> stopWord, string path);
 
 void display(struct trieNode* root, char str[], int level);
+
+string numberToString(int num);
+
+string floatToString(float num);
+
+int convertKey(char key);
+
+bool checkValid(char& key);
+
+bool isNumber(char key);
+
+bool isWord(char key);
