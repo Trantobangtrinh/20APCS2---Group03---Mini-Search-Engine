@@ -49,8 +49,6 @@ void inputData(trieNode* &root, unordered_set<string> stopWord, string word, str
         // Insert từ vào trie
         for (int i = 0; i < word.length(); ++i) {
             int index = tolower(word[i]) - 'a';
-            if (word[i] < 'a' || word[i] > 'z')
-                continue;
             if (cur->child[index] == nullptr)
                 cur->child[index] = new trieNode();
             cur = cur->child[index];
