@@ -8,6 +8,8 @@
 #include <string>
 #include <cctype>
 #include <algorithm>
+#include <map>
+#include <sstream>
 
 using namespace std;
 
@@ -55,3 +57,13 @@ bool checkValid(char& key);
 bool isNumber(char key);
 
 bool isWord(char key);
+
+vector<Store> search(trieNode* root, string word);
+
+bool cmp(pair<string, int>& a, pair<string, int>& b);
+
+vector<string> ORquery(trieNode* root, string query, unordered_set<string> stopWords);
+
+vector<string> intitleQuery(trieNode* root, string query, unordered_set<string> stopWords);
+
+vector<string> filetypeQuery(trieNode* root, string query, unordered_set<string> stopWords);
