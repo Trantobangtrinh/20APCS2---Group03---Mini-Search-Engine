@@ -50,6 +50,7 @@ void inputData(trieNode* &root, unordered_set<string> stopWord, string word, str
         for (int i = 0; i < word.length(); ++i) {
             word[i] = tolower(word[i]);
             int index = word[i] - 'a';
+            //bỏ các kí tự đặc biệt
             if (word[i] < 'a' || word[i] > 'z')
                 continue;
             if (cur->child[index] == nullptr)
@@ -96,4 +97,17 @@ void display(struct trieNode* root, char str[], int level)
             display(root->child[i], str, level + 1);
         }
     }
+}
+
+vector<Store> search(trieNode* root, string word) {
+    trieNode* cur = root;
+    for (int i = 0; i < word.length(); ++i) {
+        int index = word[i] - 'a';
+        if (!cur->child[index]) {
+            vector<Store> null;
+            return null;
+        }
+        cur = cur->child[index];
+    }
+    return cur->file;
 }
