@@ -1,6 +1,5 @@
 #pragma once
 #include"Header.h"
 
-int convertKey(char key);
 
-trieNode* searchWord(trieNode* root, string key);
+vector <string> seacrhRange(trieNode* root, string key, unordered_set<string> stopWords);
