@@ -1,0 +1,54 @@
+Group01News56.txt
+public
+
+AND
+Group01News15.txt
+nature and political
+
+OR
+Group01News56.txt
+nature or public
+
+MINUS
+Group01News56.txt
+public -camp
+
+PLUS
+Group01News15.txt
+nature +and political
+
+EXACT MATCH
+Group01News15.txt
+nature "Political"
+
+WILDCARD
+Group01News69.txt
+influential * consiglieres
+
+PRICE
+Group02News20.txt
+SRP $29.98
+
+HASTAG
+Group02News14.txt
+#64
+
+RANGE
+Group02News20.txt
+SRP $10..30
+
+FILETYPE
+Group01News64
+filetype:txt Employees
+
+INTITLE
+Group01News37.txt
+intitle: World Cup
+
+SYNONYME
+Chưa làm
+
+
+
+
+
