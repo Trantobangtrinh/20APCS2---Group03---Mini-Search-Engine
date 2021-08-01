@@ -2,7 +2,6 @@
 #include"Nhan.h"
 
 
-
 void splitKey(string key, string& a, string& b, string delim) {
 	size_t pos = 0;
 	string a, b;
@@ -110,15 +109,14 @@ void highlighter(string path, string key) {
 
 }
 
-void printTopRes(vector<Store> a, string key) {
+void printTopRes(vector<string> a, string key) {
 	for (int i = 0; i < a.size();i++) {
 		cout << endl;
-		cout << "Filename: " << a[i].fileName << endl;
-		highlighter(a[i].fileName, key);
+		cout << "Filename: " << a[i] << endl;
+		highlighter(a[i], key);
 		cout << endl;
 	}
 }
-
 
 
 
