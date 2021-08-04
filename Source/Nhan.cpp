@@ -92,30 +92,31 @@ vector <string> seacrhRange(trieNode* root, string key,unordered_set<string> sto
 	}
 }
 
-//input file name + query
-void highlighter(string path, string key) {
+//input file name + vector posa
+void highlighter(string path,vector<int> pos) {
 	ifstream fin;
 	string ss;
+	int count = 0, i = 0, k = 0;
 	fin.open(path);
 	while (!fin.eof()) {
 		fin >> ss;
-		if (ss != key) cout << ss << " ";
-		else {
+		k = i;
+		if (i < pos.size() && count == pos[i]) {
 			cout << "\033[31m" << ss << "\033[m" << " ";
-
+			i++;
 		}
+		else if (i == pos.size()) k = i - 1;
+		else if (count >= pos[k] - 3 && count <= pos[k] + 7) {
+			cout << ss << " ";
+		}
+		if (count == pos[k] - 4 || count == pos[k] + 8) {
+			cout << "...";
+		}
+		count++;
 	}
 	fin.close();
 
-}
 
-void printTopRes(vector<string> a, string key) {
-	for (int i = 0; i < a.size();i++) {
-		cout << endl;
-		cout << "Filename: " << a[i] << endl;
-		highlighter(a[i], key);
-		cout << endl;
-	}
 }
 
 
