@@ -119,6 +119,15 @@ void highlighter(string path,vector<int> pos) {
 
 }
 
+void printTopRes(vector<Store> a) {
+	for (int i = 0; i < a.size();i++) {
+		cout << endl;
+		cout << "Filename: " << a[i].fileName << endl;
+		highlighter(a[i].fileName, a[i].pos);
+		cout << endl;
+
+	}
+}
 
 
 
