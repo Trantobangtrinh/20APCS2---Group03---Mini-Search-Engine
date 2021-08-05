@@ -1,22 +1,13 @@
 #include "Header.h"
+#include <queue>
 
-struct Node {
-    string word;
-    int count;
-    Node* pNext;
-};
-
-void history(Node* historyR) {
-	ofstream out;
-	out.open("history.txt", ios::app);
-	if (out) {
-		out << historyR->word << endl;
+bool all_null(trieNode* root) {
+	if (root == nullptr) return true;
+	for (int i = 0; i < 42; i++) {
+		if (root->child[i] != nullptr)
+			return false;
 	}
-	else {
-		cout << "Can not open file";
-		return;
-	}
-	out.close();
+	return true;
 }
 
 int numberOfLine(string filename) {
@@ -34,44 +25,121 @@ int numberOfLine(string filename) {
 	return count;
 }
 
-void getHistory(Node* historyR) {
+trieNode* getNode()
+{
+	trieNode* temp = new trieNode;
+	for (int i = 0; i < 42; i++)
+	{
+		temp->child[i] = NULL;
+	}
+	return temp;
+}
+
+void saveHistory(trieNode* root) {
+	ofstream out;
+	if (root == nullptr) return;
+	trieNode* cur = root;
+	out.open("history.txt", ios::app);
+	if (out) {
+		while ((all_null(cur) == false)) {
+			for (int i = 0; i < 42; i++)
+			{
+				if (cur->child[i] != nullptr) {
+					out << cur->child[i];
+					saveHistory(cur->child[i]);
+				}
+			}
+		}
+	}
+	else {
+		cout << "Can not open file";
+		return;
+	}
+	out.close();
+}
+
+void insert(trieNode* root, string key)
+{
+	trieNode* temp = root;
+	for (int i = 0; i < (int)key.length(); i++)
+	{
+		//tui nhớ trước mình có hàm đổi mã ascii mà kiếm không thấy nữa nên xài code mẫu nha
+		int ind = int(key[i]) - 'a';
+		if (temp->child[ind] == NULL)
+		{
+			temp->child[ind] = getNode();
+		}
+		temp = temp->child[ind];
+	}
+}
+
+void getHistory(trieNode* root) {
 	ifstream in;
-	Node* pCur = historyR;
+	string str;
 	in.open("history.txt");
 	if (in) {
 		for (int i = 1; i <= numberOfLine("history.txt"); i++) {
-			if (historyR == nullptr) {
-				historyR = new Node;
-				pCur = historyR;
-			}
-			else {
-				pCur->pNext = new Node;
-				pCur = pCur->pNext;
-			}
-			getline(in, pCur->word);
-			pCur->pNext = nullptr;
+			in >> str;
+			insert(root, str);
 		}
 		in.close();
 	}
 }
 
-bool stringcmp(string input, string data) {
-    if (input == " ") return true;
- 	if (input == data) return true;
- 	else return false;
-    //dang lam tiep
-    //khuc nay dang chua biet compare sao
-    //compare the nao de in ra may tu da nhap roi?
+void findWordSuggest(trieNode* root, string key, vector<string>& suggestions) {
+	if (root == NULL) return;
+	trieNode* temp = root;
+	for (int i = 0; i < (int)key.length(); i++)
+	{
+		int ind = int(key[i]) - 'a';
+		if (temp->child[ind] == NULL) return;
+		temp = temp->child[ind];
+	}
+
+	queue<pair<trieNode*, string> > q;
+	q.push(make_pair(temp, key));
+	string this_word;
+
+	while (!q.empty())
+	{
+		temp = q.front().first;
+		this_word = q.front().second;
+		suggestions.push_back(this_word);
+		q.pop();
+		for (int i = 0; i < 26; i++)
+		{
+			if (temp->child[i] != NULL)
+			{
+				q.push(make_pair(temp->child[i], this_word + char(i + int('a'))));
+			}
+		}
+	}
 }
 
-void autoSuggest(Node* historyR, string word) {
-	int appear;
-	if (stringcmp(word, historyR->word) == true && appear < 4) {
-		cout << historyR->word;
-		historyR = historyR->pNext;
-		appear++;
+void auto_complete(trieNode* root, string key)
+{
+	if (key.length() == 0) return;
+	vector<string> suggestions;
+
+	findWordSuggest(root, key, suggestions);
+
+	if (suggestions.size() == 0)
+	{
+		cout << "There is no suggestion '\n'";
+		return;
 	}
-	else if (stringcmp(word, historyR->word) == false && appear < 4) {
-		historyR = historyR->pNext;
+
+	if (suggestions.size() == 1)
+	{
+		cout << "There are 1 suggestion for" << key << '\n'; 
+		cout << suggestions[0];
+		return;
 	}
+
+	cout << "There are " << suggestions.size() << " suggestions for " << key << '\n';
+	for (int i = 0; i < 2; i++) {
+		cout << suggestions[i] << ' ';
+	}
+
+	return;
 }
