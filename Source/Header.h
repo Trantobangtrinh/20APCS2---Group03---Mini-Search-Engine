@@ -38,11 +38,13 @@ struct trieNode
     }
 };
 
-void inputData(trieNode*& root, unordered_set<string> stopWord, string word, string path, int i, bool isTit);
+void inputData(trieNode* &root, unordered_set<string> stopWord, vector<float>&number, string word, string path, int position, bool isTit);
 
 void getStopWord(unordered_set <string> &stopWord, string path);
 
-void saveTrie(trieNode *&root, unordered_set<string> stopWord, string path);
+void saveTrie(trieNode*& root, trieNode* &rootTitle, unordered_set<string> stopWord, vector<float> &number, string path);
+
+void cleanData(string& word);
 
 void display(struct trieNode* root, char str[], int level);
 

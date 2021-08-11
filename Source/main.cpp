@@ -9,11 +9,11 @@ using namespace std;
 
 int main() {
     setConsoleWindow(800, 600);
-    trieNode *root = new trieNode();
-    unordered_set <string> stopWord;
+    // trieNode *root = new trieNode();
+    // unordered_set <string> stopWord;
 
-    getStopWord(stopWord, "stopWord.txt");
-    saveTrie(root, stopWord, "Data1000.txt");
+    // getStopWord(stopWord, "stopWord.txt");
+    // saveTrie(root, stopWord, "Data1000.txt");
 
     // int level = 0;
     // char str[20];
