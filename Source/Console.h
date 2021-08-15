@@ -5,6 +5,7 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <mmsystem.h>
+#include "Header.h"
 
 #define SIZE			16  
 #define Black			0
@@ -39,4 +40,12 @@ void gotoXY(int x, int y);
 
 // Function to hide the cursor
 void AnTroChuot();
+
+int wherex();
+int wherey();
+void hightlightLine(int x, int y, int h, int w, int color);
+void box(int x, int y, int h, int w);
+void cur(int x, int y, vector<int> h, int w, int color);
+void resultBox(int x, int y, int h, int w);
+void setFontSize(int x, int y);
 #endif

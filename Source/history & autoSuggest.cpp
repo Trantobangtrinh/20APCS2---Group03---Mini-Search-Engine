@@ -64,7 +64,7 @@ void insert(trieNode* root, string key)
 	for (int i = 0; i < (int)key.length(); i++)
 	{
 		//tui nhớ trước mình có hàm đổi mã ascii mà kiếm không thấy nữa nên xài code mẫu nha
-		int ind = int(key[i]) - 'a';
+		int ind = convertKey(key[i]);
 		if (temp->child[ind] == NULL)
 		{
 			temp->child[ind] = getNode();
@@ -91,7 +91,7 @@ void findWordSuggest(trieNode* root, string key, vector<string>& suggestions) {
 	trieNode* temp = root;
 	for (int i = 0; i < (int)key.length(); i++)
 	{
-		int ind = int(key[i]) - 'a';
+		int ind = convertKey(key[i]);
 		if (temp->child[ind] == NULL) return;
 		temp = temp->child[ind];
 	}
@@ -106,11 +106,11 @@ void findWordSuggest(trieNode* root, string key, vector<string>& suggestions) {
 		this_word = q.front().second;
 		suggestions.push_back(this_word);
 		q.pop();
-		for (int i = 0; i < 26; i++)
+		for (int i = 10; i < 36; i++)
 		{
 			if (temp->child[i] != NULL)
 			{
-				q.push(make_pair(temp->child[i], this_word + char(i + int('a'))));
+				q.push(make_pair(temp->child[i], this_word + char(i + 87)));
 			}
 		}
 	}
@@ -128,18 +128,16 @@ void auto_complete(trieNode* root, string key)
 		cout << "There is no suggestion '\n'";
 		return;
 	}
-
-	if (suggestions.size() == 1)
-	{
-		cout << "There are 1 suggestion for" << key << '\n'; 
-		cout << suggestions[0];
-		return;
+	else{
+		for (int i = key.size(); i<suggestion[0].size(); ++i){
+			cout << suggestion[0][i];
+		}
+		cout << "There are " << suggestions.size() << " suggestions for " << key << '\n';
+		for (int i = 1; i < suggestion.size(); i++) {
+			cout << suggestions[i] << ' ';
 	}
-
-	cout << "There are " << suggestions.size() << " suggestions for " << key << '\n';
-	for (int i = 0; i < 2; i++) {
-		cout << suggestions[i] << ' ';
 	}
+	
 
 	return;
 }

@@ -1,4 +1,5 @@
 ﻿#include "Header.h"
+#include "Console.h"
 
 int convertKey(char key) {
     if (key >= 48 && key <= 57) return (key - '0');
@@ -16,26 +17,50 @@ int convertKey(char key) {
     return -1;
 }
 
-void saveTrie(trieNode*& root, trieNode* &rootTitle, unordered_set<string> stopWord, vector<float> &number, string path) {
+void saveTrie(trieNode*& root, trieNode* &rootTitle, vector<float> &number, string path) {
     fstream in;
     in.open(path);
-    string word;
+    string word1, word2;
     int i = 0;
     bool isTit;
-    getline(in, word);
-    stringstream ss(word);
-    while (ss >> word) {
-        isTit = true;
-        i++;
-        inputData(rootTitle, stopWord, number, word, path, i, isTit);
+    getline(in, word1);
+    while (word1 == "")
+        getline(in, word1);
+    getline(in, word2);
+    while (!in.eof()) {
+        if (word2 != "")
+            break;
+        getline(in, word2);
     }
-
-    while (in >> word) {
-        isTit = false;
-        i++;
-        inputData(root, stopWord,number, word, path, i, isTit);
+    if (word2.length() == 0) {
+        stringstream ss(word1);
+        while (ss >> word1) {
+            isTit = false;
+            i++;
+            inputData(root, number, word1, path, i, isTit);
+        }
+    }
+    else {
+        stringstream ss(word1);
+        while (ss >> word1) {
+            isTit = true;
+            i++;
+            inputData(rootTitle, number, word1, path, i, isTit);
+        }
+        stringstream s(word2);
+        while (s >> word2) {
+            isTit = false;
+            i++;
+            inputData(root, number, word2, path, i, isTit);
+        }
         
+        while (in >> word2) {
+            isTit = false;
+            i++;
+            inputData(root, number, word2, path, i, isTit);
+        }
     }
+    
     in.close();
 
 }
@@ -52,57 +77,49 @@ void getStopWord(unordered_set <string> &stopWord, string path) {
     return;
 }
 
-void inputData(trieNode* &root, unordered_set<string> stopWord, vector<float>&number, string word, string path, int position, bool isTit) {
+void inputData(trieNode* &root, vector<float>&number, string word, string path, int position, bool isTit) {
     trieNode* cur = root;
-    bool check = false;
     // Check từ trong stop word
     // Nếu từ đó không phải stop word thì insert vào Trie
-    if (isTit == true || stopWord.find(word) == stopWord.end()) {
         // Insert từ vào trie
-        if (word[0] == '$') {
-            size_t pos = word.length() - 1;
-            string tmp = word.substr(1, pos);
-            number.push_back(stof(tmp));
-        }
+    if (word[0] == '$') {
+        size_t pos = word.length() - 1;
+        string tmp = word.substr(1, pos);
+        number.push_back(stof(tmp));
+    }
 
-        for (int i = 0; i < word.length(); ++i) {
-            cleanData(word);
-            int index = convertKey(word[i]);
-            if (index == -1)
-                continue;
-            if ((i == word.length() - 2) && convertKey(word[i + 1]) >= 36) {
-                cur->child[index] = new trieNode();
-                cur = cur->child[index];
-                break;
-            }
-            if (cur->child[index] == nullptr)
-                cur->child[index] = new trieNode();
-
+    for (int i = 0; i < word.length(); ++i) {
+        cleanData(word);
+        int index = convertKey(word[i]);
+        if (index == -1)
+            continue;
+        if ((i == word.length() - 2) && convertKey(word[i + 1]) >= 36) {
+            cur->child[index] = new trieNode();
             cur = cur->child[index];
+            break;
         }
+        if (cur->child[index] == nullptr)
+            cur->child[index] = new trieNode();
 
-        cur->isLeaf = true;
-        check = true;
-
-        // Check đã có giá trị trước đó chưa, nếu chưa thì thêm, nếu đã có thì insert vào đầu 
+        cur = cur->child[index];
     }
+
+    cur->isLeaf = true;
     
-    if (check) {
-        for (int i = 0; i < cur->file.size(); ++i) {
-            if (cur->file[i].fileName == path) {
-                cur->file[i].score++;
-                cur->file[i].pos.push_back(position);
-                cur->file[i].isTitle = isTit;
-                return;
-            }
+
+    for (int i = 0; i < cur->file.size(); ++i) {
+        if (cur->file[i].fileName == path) {
+            cur->file[i].pos.push_back(position);
+            cur->file[i].isTitle = isTit;
+            return;
         }
-        Store a;
-        a.fileName = path;
-        a.score++;
-        a.pos.push_back(position);
-        a.isTitle = isTit;
-        cur->file.push_back(a);
     }
+    Store a;
+    a.fileName = path;
+    a.pos.push_back(position);
+    a.isTitle = isTit;
+    cur->file.push_back(a);
+    
     return;
 }
 
@@ -128,12 +145,39 @@ vector<Store> search(trieNode* root, string word) {
     }
 }
 
-void readFile(trieNode*& root, trieNode* &rootTitle, unordered_set<string> stopWords, vector<float> &number) {
-    for (int i = 96; i <= 100; ++i) {
+void readFile(trieNode*& root, trieNode* &rootTitle, vector<float> &number) {
+    int x = 75, y = 18;
+    for (int i = 1; i <= 100; ++i) {
         string tmp = to_string(i) + ".txt";
-        saveTrie(root, rootTitle, stopWords, number, tmp);
-        cout << "\r" << i << " %";
+        saveTrie(root, rootTitle, number, tmp);
+        gotoXY(x, y);
+        cout << i << " %";
         
+    }
+}
+
+void read11kFile(trieNode*& root, trieNode*& rootTitle, vector<float>& number) {
+    int x = 75, y = 18;
+    string des = "C:\\Users\\User\\source\\repos\\Project2\\Project2\\11kfile\\";
+    /*ifstream in;
+    string fileName;
+    in.open(des + "index.txt");
+    int i = 1;
+    while (!in.eof()) {
+        getline(in, fileName);
+        saveTrie(root, rootTitle, number, des + fileName);
+        gotoXY(x, y);
+        cout << i << " %";
+        i++;
+    }
+    in.close();
+    */
+    for (int i = 1; i <= 11268; ++i) {
+        string tmp = to_string(i) + ".txt";
+        saveTrie(root, rootTitle, number, des + tmp);
+        gotoXY(x, y);
+        cout << i << " %";
+
     }
 }
 
